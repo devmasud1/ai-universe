@@ -4,6 +4,7 @@ const showMore = () => {
 };
 
 const handleAllData = async (isShowAll) => {
+  handleLoading(true);
   const res = await fetch(`https://openapi.programming-hero.com/api/ai/tools`);
   const data = await res.json();
   const result = data.data.tools;
@@ -23,10 +24,8 @@ const shortByDate = async () => {
   const shortByDate = result.sort((a, b) => {
     const date1 = new Date(a.published_in);
     const date2 = new Date(b.published_in);
-
     return (final = date2 - date1);
   });
-
   displayData(shortByDate);
 };
 
@@ -72,6 +71,7 @@ const displayData = (result, isShowAll) => {
 
     cardContainer.appendChild(div);
   });
+  handleLoading(false);
 };
 
 const showDetails = async (id) => {
@@ -152,6 +152,15 @@ const showDetails = async (id) => {
   `;
   modalContainer.appendChild(div);
   my_ai_modal.showModal();
+};
+
+const handleLoading = (loading) => {
+  const loadingSpinner = document.getElementById("loading-spinner");
+  if (loading === true) {
+    loadingSpinner.classList.remove("hidden");
+  } else {
+    loadingSpinner.classList.add("hidden");
+  }
 };
 
 handleAllData();
