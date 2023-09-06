@@ -1,13 +1,16 @@
-//  shortByDate()
+const showMore = () => {
+  isShowAll = true;
+  handleAllData(isShowAll);
+};
 
-const handleAllData = async () => {
+const handleAllData = async (isShowAll) => {
   const res = await fetch(`https://openapi.programming-hero.com/api/ai/tools`);
   const data = await res.json();
   const result = data.data.tools;
   result.splice(5, 1);
   result.splice(9, 2);
 
-  displayData(result);
+  displayData(result, isShowAll);
 };
 
 const shortByDate = async () => {
@@ -27,10 +30,20 @@ const shortByDate = async () => {
   displayData(shortByDate);
 };
 
-const displayData = (result) => {
-  console.log(result);
+const displayData = (result, isShowAll) => {
   const cardContainer = document.getElementById("card-container");
   cardContainer.textContent = "";
+  const showMore = document.getElementById("show-more");
+
+  if (result.length > 6 && !isShowAll) {
+    showMore.classList.remove("hidden");
+  } else {
+    showMore.classList.add("hidden");
+  }
+  if (!isShowAll) {
+    result = result.splice(0, 6);
+  }
+
   result.forEach((element) => {
     const { id, image, name, published_in, features } = element;
     const div = document.createElement("div");
@@ -130,7 +143,6 @@ const showDetails = async (id) => {
           <div class="card-body items-center text-center">
               <h2 class="card-title">${input_output_examples[0].input}<h2/>
               <p>${input_output_examples[0].output}</p>
-
           </div>
       </div>
   </div>
